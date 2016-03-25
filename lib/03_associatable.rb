@@ -41,6 +41,7 @@ class HasManyOptions < AssocOptions
       primary_key: "id".to_sym,
       class_name: "#{name.singularize.camelcase}"
     }
+
     options = default.merge(options)
     self.foreign_key = options[:foreign_key]
     self.primary_key = options[:primary_key]
@@ -53,10 +54,10 @@ module Associatable
   def belongs_to(name, options = {})
 
     define_method(name) do
-      options = BelongsToOptions.new(name, options)
+      option = BelongsToOptions.new(name, options)
       foreign_key = self.class.find(id).id
-      model = options.model_class
-      model.where(options.primary_key => foreign_key).first
+      model = option.model_class
+      model.where(option.primary_key => foreign_key).first
     end
 
   end
@@ -64,7 +65,11 @@ module Associatable
   def has_many(name, options = {})
 
     define_method(name) do
-
+      option = HasManyOptions.new(name, self.class.name, options)
+      p option
+      primary_key = self.id
+      model = option.model_class
+      model.where(option.foreign_key => primary_key)
     end
   end
 
