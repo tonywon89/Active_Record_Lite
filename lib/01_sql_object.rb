@@ -96,14 +96,12 @@ class SQLObject
   end
 
   def update
-    cols = self.class.columns.map do |col|
-      "#{col} = ?"
-    end
+    cols = self.class.columns.map { |col| "#{col} = ?" }
+
 
     cols = cols.join(",")
-    p cols
-    DBConnection.execute(<<-SQL, attribute_values, attributes[:id])
 
+    DBConnection.execute(<<-SQL, attribute_values, attributes[:id])
       UPDATE
         #{self.class.table_name}
       SET
@@ -114,6 +112,6 @@ class SQLObject
   end
 
   def save
-    # ...
+    attributes[:id].nil? ? insert : update
   end
 end
