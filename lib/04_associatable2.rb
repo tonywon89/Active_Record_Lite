@@ -1,9 +1,7 @@
 require_relative '03_associatable'
 
-# Phase IV
-module Associatable
-  # Remember to go back to 04_associatable to write ::assoc_options
 
+module Associatable
   def has_one_through(name, through_name, source_name)
 
     define_method(name) do
@@ -25,6 +23,5 @@ module Associatable
 
       source_options.model_class.new(result.first)
     end
-
   end
 end
